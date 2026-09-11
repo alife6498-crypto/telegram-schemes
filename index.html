@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Government Schemes</title>
+<style>
+*{box-sizing:border-box}html,body{margin:0;background:#10151b;color:#17212b;font-family:Arial,sans-serif}
+body{min-height:100vh}.app{max-width:900px;margin:auto;background:#f4f6f8;min-height:100vh}
+header{padding:14px 14px 8px;text-align:center}h1{font-size:22px;margin:0;font-weight:900}header p{margin:4px 0;color:#6d7782;font-size:12px}
+.search{margin:0 12px 9px;position:relative}.search input{width:100%;height:46px;border:1px solid #ddd;border-radius:14px;padding:0 42px 0 14px;font-size:14px;outline:0}.search span{position:absolute;right:14px;top:13px}
+.filters{display:flex;gap:7px;overflow:auto;padding:2px 12px 10px;scrollbar-width:none}.filters::-webkit-scrollbar{display:none}.filter{flex:none;border:1px solid #ddd;background:#fff;border-radius:22px;padding:8px 12px;font-size:11px;font-weight:700}.filter.active{background:#17212b;color:#fff}
+.stage{height:calc(100svh - 155px);min-height:560px;position:relative;perspective:1400px;overflow:hidden;touch-action:pan-y}.card{position:absolute;inset:0;background:#fff;overflow:hidden;transition:transform .55s cubic-bezier(.2,.8,.2,1),opacity .4s,filter .4s}.image{height:35svh;min-height:210px;max-height:330px;position:relative}.image img{width:100%;height:100%;object-fit:cover;display:block;transition:transform 5s}.active .image img{transform:scale(1.07)}.gradient{position:absolute;inset:0;background:linear-gradient(transparent 35%,rgba(0,0,0,.65))}.status{position:absolute;top:14px;right:14px;color:#fff;padding:7px 10px;border-radius:20px;font-size:9px;font-weight:900}.content{height:65svh;padding:17px;overflow:auto}.cat{display:inline-block;color:#fff;padding:6px 10px;border-radius:20px;font-size:9px;font-weight:900}.title{font-size:24px;line-height:1.12;font-weight:900;margin:9px 0 6px}.desc{font-size:13px;line-height:1.5;color:#707983;margin-bottom:12px}.facts{display:grid;grid-template-columns:1fr 1fr;gap:8px}.fact{background:#f3f5f7;border-radius:12px;padding:10px}.label{display:block;color:#818a92;font-size:8px;text-transform:uppercase;margin-bottom:4px}.value{font-size:12px;font-weight:800}.exam{margin-top:11px;background:#fff4cf;border-left:4px solid #e6a700;border-radius:14px;padding:12px}.exam b{font-size:11px}.exam ul{margin:7px 0 0;padding-left:19px}.exam li{font-size:12px;line-height:1.5;margin-bottom:4px}.controls{display:flex;justify-content:center;align-items:center;gap:14px;margin:8px 0}.btn{width:43px;height:43px;border:0;border-radius:50%;background:#17212b;color:#fff;font-size:24px}.counter{min-width:60px;text-align:center;font-size:12px;font-weight:800;color:#69737c}.dots{text-align:center;padding-bottom:8px}.dot{display:inline-block;width:7px;height:7px;border-radius:10px;background:#cbd0d5;margin:0 3px}.dot.active{width:22px;background:#17212b}.empty{text-align:center;padding:80px 20px;display:none}
+@media(min-width:601px){.app{margin:20px auto;border-radius:25px}.stage{height:650px}.image{height:270px}.content{height:380px}.card{border-radius:28px;box-shadow:0 20px 60px rgba(0,0,0,.18)}}
+</style>
+</head>
+<body>
+<div class="app">
+<header><h1>📚 Government Schemes</h1><p>Latest Schemes • Exam Facts • Current Affairs</p></header>
+<div class="search"><input id="search" placeholder="Search scheme, year, ministry, fact..."><span>🔎</span></div>
+<div class="filters" id="filters"></div>
+<div class="stage" id="stage"></div>
+<div class="empty" id="empty">🔍<br><b>No scheme found</b></div>
+<div class="controls"><button class="btn" id="prev">‹</button><div class="counter" id="counter">0 / 0</div><button class="btn" id="next">›</button></div>
+<div class="dots" id="dots"></div>
+</div>
+<script>
+const API_BASE = ""; // Set to your deployed API URL if using the backend.
+const DEMO = [
+{name:"PM Dhan-Dhaanya Krishi Yojana",category:"Agriculture",status:"UPDATED",color:"#168a45",image:"https://images.unsplash.com/photo-1625246333195-78d9c38ad449?auto=format&fit=crop&w=1200&q=85",description:"Agricultural development programme targeting low-productivity districts.",facts:[["Budget","2025-26"],["Districts","100"],["Period","6 Years"],["Farmers","1.7 Crore"]],examFacts:["Announced in Union Budget 2025-26.","Covers 100 low-productivity agricultural districts.","Expected to benefit about 1.7 crore farmers.","Focuses on productivity and crop diversification.","Improves post-harvest storage and irrigation.","Important Agriculture Current Affairs topic."]},
+{name:"Research, Development & Innovation Scheme",category:"Science & Technology",status:"2025",color:"#6f42c1",image:"https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1200&q=85",description:"Financing framework supporting private-sector R&D and deep-tech innovation.",facts:[["Outlay","₹1 Lakh Cr"],["Period","6 Years"],["Focus","R&D"],["Sector","Deep Tech"]],examFacts:["Supports private-sector research and development.","Promotes deep-tech innovation.","Supports strategic and sunrise technologies.","Important Science & Technology current-affairs topic."]},
+{name:"PM Viksit Bharat Rozgar Yojana",category:"Employment",status:"2025",color:"#0077b6",image:"https://images.unsplash.com/photo-1521737711867-e3b97375f902?auto=format&fit=crop&w=1200&q=85",description:"Employment-linked incentive programme supporting job creation and formal employment.",facts:[["Sector","Employment"],["Focus","Job Creation"],["Target","Employees"],["Priority","Manufacturing"]],examFacts:["Formerly known as the Employment Linked Incentive Scheme.","Promotes employment generation.","Supports first-time employees.","Special focus on manufacturing."]},
+{name:"Bharat-VISTAAR",category:"Agriculture & AI",status:"BUDGET 2026",color:"#0d6efd",image:"https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&w=1200&q=85",description:"Multilingual AI tool proposed to provide customised agricultural advisory.",facts:[["Technology","AI"],["Sector","Agriculture"],["Nature","Multilingual"],["Budget","2026-27"]],examFacts:["Announced in Union Budget 2026-27.","It is a multilingual AI tool.","Aims to provide customised agricultural advisory.","Supports farmer decision-making."]}
+];
+
+let schemes=[...DEMO], filtered=[...schemes], idx=0, cat="All", timer;
+const $=id=>document.getElementById(id);
+function filters(){let cats=["All",...new Set(schemes.map(x=>x.category))];$("filters").innerHTML=cats.map(x=>`<button class="filter ${x===cat?'active':''}" data-cat="${x}">${x}</button>`).join("");document.querySelectorAll(".filter").forEach(b=>b.onclick=()=>{cat=b.dataset.cat;idx=0;apply();filters()})}
+function apply(){let q=$("search").value.toLowerCase().trim();filtered=schemes.filter(s=>(cat==="All"||s.category===cat)&&(!q||[s.name,s.category,s.status,s.description,...s.facts.flat(),...s.examFacts].join(" ").toLowerCase().includes(q)));idx=0;render()}
+function render(){ $("stage").innerHTML="";$("dots").innerHTML="";if(!filtered.length){$("stage").style.display="none";$("empty").style.display="block";$("counter").textContent="0 / 0";return} $("stage").style.display="block";$("empty").style.display="none";filtered.forEach((s,i)=>{let c=document.createElement("article");c.className="card";c.innerHTML=`<div class="image"><img src="${s.image}" alt=""><div class="gradient"></div><div class="status" style="background:${s.color}">${s.status}</div></div><div class="content"><span class="cat" style="background:${s.color}">${s.category}</span><div class="title">${s.name}</div><div class="desc">${s.description}</div><div class="facts">${s.facts.map(f=>`<div class="fact"><span class="label">${f[0]}</span><span class="value">${f[1]}</span></div>`).join("")}</div><div class="exam"><b>📝 EXAM FACTS</b><ul>${s.examFacts.map(f=>`<li>${f}</li>`).join("")}</ul></div></div>`;$("stage").appendChild(c);let d=document.createElement("span");d.className="dot";d.onclick=()=>{idx=i;update()};$("dots").appendChild(d)});update()}
+function update(){document.querySelectorAll(".card").forEach((c,i)=>{let p=(i-idx+filtered.length)%filtered.length;c.classList.toggle("active",p===0);c.style.transform=p===0?"translateY(0) scale(1)":p===1?"translateY(18px) scale(.96)":p===2?"translateY(35px) scale(.92)":"translateY(55px) scale(.87)";c.style.opacity=p===0?"1":p===1?".85":p===2?".55":"0";c.style.zIndex=10-p;c.style.filter=p>0?"brightness(.94)":"none"});$("counter").textContent=`${idx+1} / ${filtered.length}`;document.querySelectorAll(".dot").forEach((d,i)=>d.classList.toggle("active",i===idx))}
+function next(){if(filtered.length){idx=(idx+1)%filtered.length;update()}} function prev(){if(filtered.length){idx=(idx-1+filtered.length)%filtered.length;update()}}
+$("next").onclick=next;$("prev").onclick=prev;$("search").oninput=apply;
+let sx=0,sy=0,st=0;$("stage").ontouchstart=e=>{sx=e.touches[0].clientX;sy=e.touches[0].clientY;st=Date.now()};$("stage").ontouchend=e=>{let dx=sx-e.changedTouches[0].clientX,dy=sy-e.changedTouches[0].clientY;if(Math.abs(dx)>55&&Math.abs(dx)>Math.abs(dy)&&Date.now()-st<900)(dx>0?next:prev)()};
+function autoplay(){clearInterval(timer);timer=setInterval(next,6500)}filters();render();autoplay();
+</script>
+</body>
+</html>
