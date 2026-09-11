@@ -1,4 +1,4 @@
-import os, threading, requests
+import os, threading, requests, asyncio
 from flask import Flask, jsonify, send_from_directory
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import Application, CommandHandler, MessageHandler, ConversationHandler, CallbackQueryHandler, ContextTypes, filters
@@ -66,7 +66,8 @@ async def delete(u,c):
  sid=q.data.split(':',1)[1]; r=requests.delete(f'{SUPABASE_URL}/rest/v1/schemes',headers=hdr(),params={'id':f'eq.{sid}'},timeout=20)
  await q.edit_message_text('🗑 Scheme deleted.' if r.ok else f'❌ Delete failed: {r.text}')
 def runbot():
- a=Application.builder().token(BOT_TOKEN).build()
+    asyncio.set_event_loop(asyncio.new_event_loop())
+    a=Application.builder().token(BOT_TOKEN).build()
  conv=ConversationHandler(entry_points=[CommandHandler('add',add)],states={NAME:[MessageHandler(filters.TEXT&~filters.COMMAND,name)],CAT:[MessageHandler(filters.TEXT&~filters.COMMAND,cat)],STATUS:[MessageHandler(filters.TEXT&~filters.COMMAND,status)],COLOR:[MessageHandler(filters.TEXT&~filters.COMMAND,color)],IMAGE:[MessageHandler(filters.TEXT&~filters.COMMAND,image)],DESC:[MessageHandler(filters.TEXT&~filters.COMMAND,desc)],FACTS:[MessageHandler(filters.TEXT&~filters.COMMAND,facts)],EXAM:[MessageHandler(filters.TEXT&~filters.COMMAND,exam)]},fallbacks=[CommandHandler('cancel',lambda u,c:ConversationHandler.END)])
  a.add_handler(CommandHandler('start',start)); a.add_handler(CommandHandler('help',helpc)); a.add_handler(CommandHandler('schemes',schemes)); a.add_handler(conv); a.add_handler(CallbackQueryHandler(addcb,pattern='^(publish|cancel)$')); a.add_handler(CallbackQueryHandler(view,pattern='^view:')); a.add_handler(CallbackQueryHandler(delete,pattern='^del:')); a.run_polling(close_loop=False)
 if __name__=='__main__':
